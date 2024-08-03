@@ -13,6 +13,7 @@
 #include "log.h" // for tr_log_level
 #include "net.h" // for tr_port, tr_tos_t
 #include "quark.h"
+#include "settings.h"
 
 struct tr_variant;
 
@@ -85,6 +86,7 @@ struct tr_session_settings
 
     void load(tr_variant* src);
     void save(tr_variant* tgt) const;
+    void save(::transmission::Settings&) const;
 
 #define V(key, name, type, default_value, comment) type name = type{ default_value };
     SESSION_SETTINGS_FIELDS(V)

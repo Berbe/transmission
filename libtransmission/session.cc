@@ -472,6 +472,13 @@ void tr_sessionGetDefaultSettings(tr_variant* setme_dictionary)
     tr_session_alt_speeds::defaultSettings(setme_dictionary);
 }
 
+void tr_sessionGetDefaultSettings(::transmission::Settings& settings)
+{
+    tr_session_settings{}.save(settings);
+    /*tr_rpc_server::defaultSettings(setme_dictionary);
+    tr_session_alt_speeds::defaultSettings(setme_dictionary);*/
+}
+
 void tr_sessionGetSettings(tr_session const* session, tr_variant* setme_dictionary)
 {
     session->settings_.save(setme_dictionary);
