@@ -14,6 +14,7 @@
 #include <libtransmission/utils.h>
 #include <libtransmission/file.h>
 #include <libtransmission/log.h>
+#include <libtransmission/settings.h>
 
 class tr_daemon
 {
@@ -47,6 +48,7 @@ private:
     bool seen_hup_ = false;
     std::string config_dir_;
     tr_variant settings_ = {};
+    ::transmission::Settings settings;
     bool logfile_flush_ = false;
     tr_session* my_session_ = nullptr;
     char const* log_file_name_ = nullptr;

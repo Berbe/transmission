@@ -892,6 +892,8 @@ bool tr_daemon::init(int argc, char const* const argv[], bool* foreground, int* 
     tr_variantInitDict(&settings_, 0);
     tr_variantDictAddBool(&settings_, TR_KEY_rpc_enabled, true);
     bool const loaded = tr_sessionLoadSettings(&settings_, config_dir_.c_str(), MyName);
+    bool const loaded_new = settings.Load(config_dir_.c_str(), MyName);
+    settings.set("test1", 10);
 
     bool dumpSettings;
 
