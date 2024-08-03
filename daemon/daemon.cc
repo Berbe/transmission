@@ -26,6 +26,7 @@
 
 #include "daemon.h"
 
+#include <libtransmission/settings.h>
 #include <libtransmission/timer-ev.h>
 #include <libtransmission/tr-getopt.h>
 #include <libtransmission/tr-macros.h>
@@ -654,6 +655,7 @@ void tr_daemon::reconfigure(void)
     else
     {
         tr_variant newsettings;
+        ::transmission::Settings settings;
         char const* configDir;
 
         /* reopen the logfile to allow for log rotation */
@@ -667,6 +669,8 @@ void tr_daemon::reconfigure(void)
         tr_variantInitDict(&newsettings, 0);
         tr_variantDictAddBool(&newsettings, TR_KEY_rpc_enabled, true);
         tr_sessionLoadSettings(&newsettings, configDir, MyName);
+        settings.Load(configDir, MyName);
+        settings.set("test1", 10);
         tr_sessionSet(my_session_, &newsettings);
         tr_variantClear(&newsettings);
         tr_sessionReloadBlocklists(my_session_);
