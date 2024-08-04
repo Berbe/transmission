@@ -41,6 +41,7 @@ set(MBEDTLS_MINIMUM 1.3)
 set(NPM_MINIMUM 8.1.307) # Node.js 14
 set(PSL_MINIMUM 0.21.1)
 set(QT_MINIMUM 5.6)
+set(NLOHMANN_JSON_MINIMUM 3.2.0)
 
 option(ENABLE_DAEMON "Build daemon" ON)
 tr_auto_option(ENABLE_GTK "Build GTK client" AUTO)
@@ -866,3 +867,5 @@ if(GIT_FOUND)
 endif()
 
 include(CPack)
+
+find_package(NLOHMANN_JSON ${NLOHMANN_JSON_MINIMUM} REQUIRED)

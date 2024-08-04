@@ -47,3 +47,6 @@
 [submodule "third-party/wide-integer"]
 	path = third-party/wide-integer
 	url = https://github.com/transmission/wide-integer
+[submodule "third-party/nlohmann-json"]
+	path = third-party/nlohmann-json
+	url = https://github.com/nlohmann/json
