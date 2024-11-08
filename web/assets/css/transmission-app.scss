@@ -12,6 +12,12 @@
   }
 }
 
+@mixin viewport-large {
+  @media (width >= 950px) {
+    @content;
+  }
+}
+
 :root {
   /* z-index enum */
   --z-index-popup: 2;
@@ -283,6 +289,12 @@ a {
   flex: 1;
   flex-direction: row;
   overflow: auto;
+
+  @include viewport-large {
+    .contract {
+      min-width: 570px;
+    }
+  }
 }
 
 .popup,
@@ -552,16 +564,17 @@ a {
       border: 1px solid var(--color-border-default);
     }
 
-    .torrent-progress-details,
     .torrent-peer-details {
-      &.error {
-        color: var(--color-fg-error);
-      }
+      white-space: nowrap;
     }
 
     .torrent-progress-details,
     .torrent-peer-details {
       font-size: small;
+
+      &.error {
+        color: var(--color-fg-error);
+      }
     }
 
     &.compact {
@@ -702,7 +715,6 @@ a {
 
     &.compact {
       min-width: 100px;
-      width: 10vw;
     }
 
     &.leech {
@@ -801,6 +813,12 @@ a {
   input[type='checkbox'] {
     height: 20px;
     width: 20px;
+  }
+}
+
+#inspector {
+  @include viewport-large {
+    box-shadow: initial;
   }
 }
 
