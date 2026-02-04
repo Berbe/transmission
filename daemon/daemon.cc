@@ -265,7 +265,7 @@ auto onFileAdded(tr_session* session, std::string_view dirname, std::string_view
     return Watchdir::Action::Done;
 }
 
-[[nodiscard]] constexpr char const* levelName(tr_log_level level)
+[[nodiscard]] constexpr std::string_view const levelName(tr_log_level level)
 {
     switch (level)
     {
