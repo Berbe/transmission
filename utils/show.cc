@@ -89,6 +89,7 @@ int parseCommandLine(app_opts& opts, int argc, char const* const* argv)
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
+        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
         switch (c)
         {
         case 'b':
@@ -156,7 +157,7 @@ int parseCommandLine(app_opts& opts, int argc, char const* const* argv)
             break;
 
         case TR_OPT_UNK:
-            opts.filename = optarg;
+            opts.filename = optarg_sv;
             break;
 
         default:

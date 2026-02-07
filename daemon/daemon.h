@@ -50,12 +50,12 @@ private:
     std::string config_dir_;
     tr_variant settings_ = {};
     tr_session* my_session_ = nullptr;
-    char const* log_file_name_ = nullptr;
+    std::string log_file_name_;
     struct event_base* ev_base_ = nullptr;
     FILE* log_stream_ = nullptr;
 
     bool parse_args(int argc, char const* const* argv, bool* dump_settings, bool* foreground, int* exit_code);
-    bool reopen_log_file(char const* filename);
+    bool reopen_log_file(std::string_view filename);
     bool setup_signals(struct event*& sig_ev);
     void cleanup_signals(struct event* sig_ev) const;
     void report_status();

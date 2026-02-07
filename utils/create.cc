@@ -81,6 +81,7 @@ int parseCommandLine(app_options& options, int argc, char const* const* argv)
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
+        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
         switch (c)
         {
         case 'V':
@@ -108,10 +109,10 @@ int parseCommandLine(app_options& options, int argc, char const* const* argv)
             break;
 
         case 's':
-            if (optarg != nullptr)
+            if (!optarg_sv.empty())
             {
                 char* endptr = nullptr;
-                options.piece_size = strtoul(optarg, &endptr, 10) * KiB;
+                options.piece_size = strtoul(optarg_sv.data(), &endptr, 10) * KiB;
                 if (endptr != nullptr && *endptr == 'M')
                 {
                     options.piece_size *= KiB;

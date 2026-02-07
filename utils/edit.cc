@@ -28,10 +28,10 @@ char constexpr Usage[] = "Usage: transmission-edit [options] torrent-file(s)";
 struct app_options
 {
     std::vector<std::string_view> files;
-    char const* add = nullptr;
-    char const* deleteme = nullptr;
-    std::array<char const*, 2> replace;
-    char const* source = nullptr;
+    std::string add;
+    std::string deleteme;
+    std::array<std::string_view, 2> replace;
+    std::string_view source;
     bool show_version = false;
 };
 
@@ -56,18 +56,19 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
+        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
         switch (c)
         {
         case 'a':
-            opts.add = optarg;
+            opts.add = optarg_sv;
             break;
 
         case 'd':
-            opts.deleteme = optarg;
+            opts.deleteme = optarg_sv;
             break;
 
         case 'r':
-            opts.replace[0] = optarg;
+            opts.replace[0] = optarg_sv;
             c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg);
 
             if (c != TR_OPT_UNK)
@@ -75,11 +76,11 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
                 return 1;
             }
 
-            opts.replace[1] = optarg;
+            opts.replace[1] = optarg_sv;
             break;
 
         case 's':
-            opts.source = optarg;
+            opts.source = optarg_sv;
             break;
 
         case 'V':
@@ -235,7 +236,7 @@ bool replaceURL(tr_variant* metainfo, std::string_view oldval, std::string_view 
     return changed;
 }
 
-[[nodiscard]] bool announce_list_has_url(tr_variant* announce_list, char const* url)
+[[nodiscard]] bool announce_list_has_url(tr_variant* announce_list, std::string_view url)
 {
     int tierCount = 0;
     tr_variant* tier;
@@ -261,7 +262,7 @@ bool replaceURL(tr_variant* metainfo, std::string_view oldval, std::string_view 
     return false;
 }
 
-bool addURL(tr_variant* metainfo, char const* url)
+bool addURL(tr_variant* metainfo, std::string_view url)
 {
     auto announce = std::string_view{};
     tr_variant* announce_list = nullptr;
@@ -305,7 +306,7 @@ bool addURL(tr_variant* metainfo, char const* url)
     return changed;
 }
 
-bool setSource(tr_variant* metainfo, char const* source_value)
+bool setSource(tr_variant* metainfo, std::string_view source_value)
 {
     auto current_source = std::string_view{};
     bool const had_source = tr_variantDictFindStrView(metainfo, TR_KEY_source, &current_source);
@@ -356,7 +357,7 @@ int tr_main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    if (options.add == nullptr && options.deleteme == nullptr && options.replace[0] == nullptr && options.source == nullptr)
+    if (options.add.empty() && options.deleteme.empty() && options.replace[0].empty() && options.source.empty())
     {
         fmt::print(stderr, "ERROR: Must specify -a, -d, -r or -s\n");
         tr_getopt_usage(MyName, Usage, std::data(Options));
@@ -379,22 +380,22 @@ int tr_main(int argc, char* argv[])
         }
         auto& top = *otop;
 
-        if (options.deleteme != nullptr)
+        if (!options.deleteme.empty())
         {
             changed |= removeURL(&top, options.deleteme);
         }
 
-        if (options.add != nullptr)
+        if (!options.add.empty())
         {
             changed = addURL(&top, options.add);
         }
 
-        if (options.replace[0] != nullptr && options.replace[1] != nullptr)
+        if (!options.replace[0].empty() && !options.replace[1].empty())
         {
             changed |= replaceURL(&top, options.replace[0], options.replace[1]);
         }
 
-        if (options.source != nullptr)
+        if (!options.source.empty())
         {
             changed = setSource(&top, options.source);
         }

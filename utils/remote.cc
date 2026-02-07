@@ -3265,7 +3265,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             {
             case 994:
                 args.insert_or_assign(TR_KEY_sequential_download, true);
-                if (optarg != nullptr)
+                if (!optarg_sv.empty())
                 {
                     args.insert_or_assign(TR_KEY_sequential_download_from_piece, numarg(optarg_sv));
                 }

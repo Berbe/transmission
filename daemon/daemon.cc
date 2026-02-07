@@ -407,11 +407,11 @@ tr_variant load_settings(std::string_view const config_dir)
 
 } // namespace
 
-bool tr_daemon::reopen_log_file(char const* filename)
+bool tr_daemon::reopen_log_file(std::string_view filename)
 {
     auto* const old_stream = log_stream_;
 
-    auto* new_stream = std::fopen(filename, "a");
+    auto* new_stream = std::fopen(filename.data(), "a");
     if (new_stream == nullptr)
     {
         auto const err = errno;
@@ -540,6 +540,7 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optstr)) != TR_OPT_DONE)
     {
+        auto const optstr_sv = std::string_view{ optstr != nullptr ? optstr : "" };
         switch (c)
         {
         case 'a':
@@ -590,9 +591,9 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
             break;
 
         case 'e':
-            if (reopen_log_file(optstr))
+            if (reopen_log_file(optstr_sv))
             {
-                log_file_name_ = optstr;
+                log_file_name_ = optstr_sv;
             }
 
             break;
@@ -765,7 +766,7 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
             break;
 
         case TR_OPT_UNK:
-            fprintf(stderr, "Unexpected argument: %s \n", optstr);
+            std::cerr << "Unexpected argument: " << optstr_sv << " " << std::endl;
             tr_getopt_usage(MyName, Usage, std::data(Options));
             *exit_code = 1;
             return false;
@@ -810,7 +811,7 @@ void tr_daemon::reconfigure()
 #endif
 
         /* reopen the logfile to allow for log rotation */
-        if (log_file_name_ != nullptr)
+        if (!log_file_name_.empty())
         {
             reopen_log_file(log_file_name_);
         }
