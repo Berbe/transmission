@@ -2577,7 +2577,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
 
     for (;;)
     {
-        int const c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg);
+        int const c = tr_getopt(Usage, argc, argv, std::data(Options), optarg);
         if (c == TR_OPT_DONE)
         {
             break;

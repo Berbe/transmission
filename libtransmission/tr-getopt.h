@@ -53,7 +53,7 @@ enum : int8_t
  * @brief similar to `getopt()`
  * @return `TR_GETOPT_DONE`, `TR_GETOPT_ERR`, `TR_GETOPT_UNK`, or the matching `tr_option`'s `val` field
  */
-int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option const* opts, std::string* setme_optarg);
+int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option const* opts, std::string& setme_optarg);
 
 /** @brief prints the `Usage` help section to stdout */
 void tr_getopt_usage(char const* app_name, char const* description, tr_option const* opts);

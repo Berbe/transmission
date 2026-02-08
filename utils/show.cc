@@ -87,7 +87,7 @@ int parseCommandLine(app_opts& opts, int argc, char const* const* argv)
     int c;
     std::string optarg;
 
-    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
+    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), optarg)) != TR_OPT_DONE)
     {
         switch (c)
         {

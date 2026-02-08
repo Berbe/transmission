@@ -166,7 +166,7 @@ namespace
     std::string optstr;
     int const ind = tr_optind;
 
-    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optstr)) != TR_OPT_DONE)
+    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), optstr)) != TR_OPT_DONE)
     {
         if (c == 'g')
         {
@@ -538,7 +538,7 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
 
     tr_optind = 1;
 
-    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optstr)) != TR_OPT_DONE)
+    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), optstr)) != TR_OPT_DONE)
     {
         switch (c)
         {

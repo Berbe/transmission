@@ -54,7 +54,7 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
     int c;
     std::string optarg;
 
-    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
+    while ((c = tr_getopt(Usage, argc, argv, std::data(Options), optarg)) != TR_OPT_DONE)
     {
         switch (c)
         {
@@ -68,7 +68,7 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
 
         case 'r':
             opts.replace[0] = optarg;
-            c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg);
+            c = tr_getopt(Usage, argc, argv, std::data(Options), optarg);
 
             if (c != TR_OPT_UNK)
             {

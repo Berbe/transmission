@@ -76,7 +76,7 @@ protected:
 
         auto c = int{};
         std::string argstr;
-        while ((c = tr_getopt("summary", argc, argv, Options.data(), &argstr)) != TR_OPT_DONE)
+        while ((c = tr_getopt("summary", argc, argv, Options.data(), argstr)) != TR_OPT_DONE)
         {
             EXPECT_LT(n, expected_n);
             EXPECT_EQ(expected_c[n], c);

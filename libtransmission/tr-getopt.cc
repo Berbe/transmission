@@ -190,12 +190,12 @@ void tr_getopt_usage(char const* app_name, char const* description, struct tr_op
     }
 }
 
-int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option const* opts, std::string* setme_optarg)
+int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option const* opts, std::string& setme_optarg)
 {
     char const* arg = nullptr;
     tr_option const* o = nullptr;
 
-    setme_optarg->assign("");
+    setme_optarg.assign("");
 
     /* handle the builtin 'help' option */
     for (int i = 1; i < argc; ++i)
@@ -218,7 +218,7 @@ int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option co
     if (o == nullptr)
     {
         /* let the user know we got an unknown option... */
-        setme_optarg->assign(argv[tr_optind++]);
+        setme_optarg.assign(argv[tr_optind++]);
         return TR_OPT_UNK;
     }
 
@@ -239,7 +239,7 @@ int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option co
     /* option allows an argument, and it was embedded in this string */
     if (arg != nullptr)
     {
-        setme_optarg->assign(arg);
+        setme_optarg.assign(arg);
         return o->val;
     }
 
@@ -254,6 +254,6 @@ int tr_getopt(char const* usage, int argc, char const* const* argv, tr_option co
         return o->val;
     }
 
-    setme_optarg->assign(argv[tr_optind++]);
+    setme_optarg.assign(argv[tr_optind++]);
     return o->val;
 }
