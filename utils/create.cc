@@ -111,7 +111,7 @@ int parseCommandLine(app_options& options, int argc, char const* const* argv)
             if (!optarg.empty())
             {
                 char* endptr = nullptr;
-                options.piece_size = strtoul(optarg.c_str(), &endptr, 10) * KiB;
+                options.piece_size = strtoul(optarg.data(), &endptr, 10) * KiB;
                 if (endptr != nullptr && *endptr == 'M')
                 {
                     options.piece_size *= KiB;

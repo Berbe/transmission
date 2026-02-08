@@ -80,7 +80,7 @@ protected:
         {
             EXPECT_LT(n, expected_n);
             EXPECT_EQ(expected_c[n], c);
-            EXPECT_STREQ(expected_args[n], argstr.c_str());
+            EXPECT_STREQ(expected_args[n], argstr.data());
             ++n;
         }
 
