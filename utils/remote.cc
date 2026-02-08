@@ -2583,7 +2583,6 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             break;
         }
 
-        auto const optarg_sv = std::string_view{ optarg };
         if (auto const step_mode = get_opt_mode(c); step_mode == MODE_META_COMMAND) /* meta commands */
         {
             switch (c)
@@ -2622,11 +2621,11 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 968: /* Unix domain socket */
-                config.unix_socket_path = optarg_sv;
+                config.unix_socket_path = optarg;
                 break;
 
             case 'n': /* auth */
-                config.auth = optarg_sv;
+                config.auth = optarg;
                 break;
 
             case 810: /* authenv */
@@ -2643,7 +2642,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 'N':
-                config.netrc = optarg_sv;
+                config.netrc = optarg;
                 break;
 
             case 820:
@@ -2667,7 +2666,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                     }
                 }
 
-                config.torrent_ids = optarg_sv;
+                config.torrent_ids = optarg;
                 break;
 
             case 'V': /* show version number */
@@ -2697,13 +2696,13 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                         }
                         else
                         {
-                            params->try_emplace(TR_KEY_filename, optarg_sv);
+                            params->try_emplace(TR_KEY_filename, optarg);
                         }
                     }
                 }
                 else
                 {
-                    fmt::print(stderr, "Unknown option: {:s}\n", optarg_sv);
+                    fmt::print(stderr, "Unknown option: {:s}\n", optarg);
                     status |= EXIT_FAILURE;
                 }
 
@@ -2736,7 +2735,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             switch (c)
             {
             case 'F':
-                config.filter = optarg_sv;
+                config.filter = optarg;
                 map.insert_or_assign(TR_KEY_id, ID_FILTER);
 
                 for (auto const& key : DetailsKeys)
@@ -2815,7 +2814,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             switch (c)
             {
             case 800:
-                args.insert_or_assign(TR_KEY_script_torrent_done_filename, optarg_sv);
+                args.insert_or_assign(TR_KEY_script_torrent_done_filename, optarg);
                 args.insert_or_assign(TR_KEY_script_torrent_done_enabled, true);
                 break;
 
@@ -2824,7 +2823,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 802:
-                args.insert_or_assign(TR_KEY_script_torrent_done_seeding_filename, optarg_sv);
+                args.insert_or_assign(TR_KEY_script_torrent_done_seeding_filename, optarg);
                 args.insert_or_assign(TR_KEY_script_torrent_done_seeding_enabled, true);
                 break;
 
@@ -2841,11 +2840,11 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 972:
-                args.insert_or_assign(TR_KEY_alt_speed_down, numarg(optarg_sv));
+                args.insert_or_assign(TR_KEY_alt_speed_down, numarg(optarg));
                 break;
 
             case 973:
-                args.insert_or_assign(TR_KEY_alt_speed_up, numarg(optarg_sv));
+                args.insert_or_assign(TR_KEY_alt_speed_up, numarg(optarg));
                 break;
 
             case 974:
@@ -2857,19 +2856,19 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 976:
-                add_time(args, TR_KEY_alt_speed_time_begin, optarg_sv);
+                add_time(args, TR_KEY_alt_speed_time_begin, optarg);
                 break;
 
             case 977:
-                add_time(args, TR_KEY_alt_speed_time_end, optarg_sv);
+                add_time(args, TR_KEY_alt_speed_time_end, optarg);
                 break;
 
             case 978:
-                add_days(args, TR_KEY_alt_speed_time_day, optarg_sv);
+                add_days(args, TR_KEY_alt_speed_time_day, optarg);
                 break;
 
             case 'c':
-                args.insert_or_assign(TR_KEY_incomplete_dir, optarg_sv);
+                args.insert_or_assign(TR_KEY_incomplete_dir, optarg);
                 args.insert_or_assign(TR_KEY_incomplete_dir_enabled, true);
                 break;
 
@@ -2878,7 +2877,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 'e':
-                if (auto val = tr_num_parse<int64_t>(optarg_sv))
+                if (auto val = tr_num_parse<int64_t>(optarg))
                 {
                     args.insert_or_assign(TR_KEY_cache_size_mib, *val);
                 }
@@ -2918,7 +2917,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 830:
-                set_preferred_transports(args, optarg_sv);
+                set_preferred_transports(args, optarg);
                 break;
 
             case 831:
@@ -2930,7 +2929,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 'p':
-                args.insert_or_assign(TR_KEY_peer_port, numarg(optarg_sv));
+                args.insert_or_assign(TR_KEY_peer_port, numarg(optarg));
                 break;
 
             case 'P':
@@ -2954,7 +2953,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 953:
-                if (auto const val = tr_num_parse<double>(optarg_sv))
+                if (auto const val = tr_num_parse<double>(optarg))
                 {
                     args.insert_or_assign(TR_KEY_seed_ratio_limit, *val);
                     args.insert_or_assign(TR_KEY_seed_ratio_limited, true);
@@ -2971,7 +2970,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 958:
-                if (auto const val = tr_num_parse<int64_t>(optarg_sv))
+                if (auto const val = tr_num_parse<int64_t>(optarg))
                 {
                     args.insert_or_assign(TR_KEY_idle_seeding_limit, *val);
                     args.insert_or_assign(TR_KEY_idle_seeding_limit_enabled, true);
@@ -3027,12 +3026,12 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             case 'd':
                 if (targs != nullptr)
                 {
-                    targs->insert_or_assign(TR_KEY_download_limit, numarg(optarg_sv));
+                    targs->insert_or_assign(TR_KEY_download_limit, numarg(optarg));
                     targs->insert_or_assign(TR_KEY_download_limited, true);
                 }
                 else
                 {
-                    sargs->insert_or_assign(TR_KEY_speed_limit_down, numarg(optarg_sv));
+                    sargs->insert_or_assign(TR_KEY_speed_limit_down, numarg(optarg));
                     sargs->insert_or_assign(TR_KEY_speed_limit_down_enabled, true);
                 }
 
@@ -3053,12 +3052,12 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             case 'u':
                 if (targs != nullptr)
                 {
-                    targs->insert_or_assign(TR_KEY_upload_limit, numarg(optarg_sv));
+                    targs->insert_or_assign(TR_KEY_upload_limit, numarg(optarg));
                     targs->insert_or_assign(TR_KEY_upload_limited, true);
                 }
                 else
                 {
-                    sargs->insert_or_assign(TR_KEY_speed_limit_up, numarg(optarg_sv));
+                    sargs->insert_or_assign(TR_KEY_speed_limit_up, numarg(optarg));
                     sargs->insert_or_assign(TR_KEY_speed_limit_up_enabled, true);
                 }
 
@@ -3077,7 +3076,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 930:
-                if (auto const val = tr_num_parse<int64_t>(optarg_sv))
+                if (auto const val = tr_num_parse<int64_t>(optarg))
                 {
                     if (targs != nullptr)
                     {
@@ -3107,7 +3106,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             switch (c)
             {
             case 712:
-                if (auto const val = tr_num_parse<int64_t>(optarg_sv))
+                if (auto const val = tr_num_parse<int64_t>(optarg))
                 {
                     auto* list = args.find_if<tr_variant::Vector>(TR_KEY_tracker_remove);
                     if (list == nullptr)
@@ -3125,7 +3124,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 950:
-                if (auto const val = tr_num_parse<double>(optarg_sv))
+                if (auto const val = tr_num_parse<double>(optarg))
                 {
                     args.insert_or_assign(TR_KEY_seed_ratio_limit, *val);
                     args.insert_or_assign(TR_KEY_seed_ratio_mode, TR_RATIOLIMIT_SINGLE);
@@ -3146,7 +3145,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 955:
-                if (auto const val = tr_num_parse<int64_t>(optarg_sv))
+                if (auto const val = tr_num_parse<int64_t>(optarg))
                 {
                     args.insert_or_assign(TR_KEY_seed_idle_limit, *val);
                     args.insert_or_assign(TR_KEY_seed_idle_mode, TR_IDLELIMIT_SINGLE);
@@ -3186,19 +3185,19 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             switch (c)
             {
             case 'g':
-                args.insert_or_assign(TR_KEY_files_wanted, make_files_list(optarg_sv));
+                args.insert_or_assign(TR_KEY_files_wanted, make_files_list(optarg));
                 break;
 
             case 'G':
-                args.insert_or_assign(TR_KEY_files_unwanted, make_files_list(optarg_sv));
+                args.insert_or_assign(TR_KEY_files_unwanted, make_files_list(optarg));
                 break;
 
             case 'L':
-                add_labels(args, optarg_sv);
+                add_labels(args, optarg);
                 break;
 
             case 730:
-                set_group(args, optarg_sv);
+                set_group(args, optarg);
                 break;
 
             case 731:
@@ -3206,15 +3205,15 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 900:
-                args.insert_or_assign(TR_KEY_priority_high, make_files_list(optarg_sv));
+                args.insert_or_assign(TR_KEY_priority_high, make_files_list(optarg));
                 break;
 
             case 901:
-                args.insert_or_assign(TR_KEY_priority_normal, make_files_list(optarg_sv));
+                args.insert_or_assign(TR_KEY_priority_normal, make_files_list(optarg));
                 break;
 
             case 902:
-                args.insert_or_assign(TR_KEY_priority_low, make_files_list(optarg_sv));
+                args.insert_or_assign(TR_KEY_priority_low, make_files_list(optarg));
                 break;
 
             case 700:
@@ -3237,7 +3236,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                         list = args.insert_or_assign(TR_KEY_tracker_add, tr_variant::make_vector(1))
                                    .first.get_if<tr_variant::Vector>();
                     }
-                    list->emplace_back(optarg_sv);
+                    list->emplace_back(optarg);
                 }
                 break;
 
@@ -3267,7 +3266,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 args.insert_or_assign(TR_KEY_sequential_download, true);
                 if (!optarg.empty())
                 {
-                    args.insert_or_assign(TR_KEY_sequential_download_from_piece, numarg(optarg_sv));
+                    args.insert_or_assign(TR_KEY_sequential_download_from_piece, numarg(optarg));
                 }
                 break;
 
@@ -3379,7 +3378,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             case 'w':
                 {
                     auto& args = tadd.has_value() ? ensure_tadd(tadd) : ensure_sset(sset);
-                    args.insert_or_assign(TR_KEY_download_dir, optarg_sv);
+                    args.insert_or_assign(TR_KEY_download_dir, optarg);
                 }
                 break;
 
@@ -3429,7 +3428,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             case 960:
                 {
                     auto params = tr_variant::Map{ 3U };
-                    params.try_emplace(TR_KEY_location, optarg_sv);
+                    params.try_emplace(TR_KEY_location, optarg);
                     params.try_emplace(TR_KEY_move, true);
                     add_id_arg(params, config);
 
@@ -3454,13 +3453,13 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                     TR_ASSERT(params != nullptr);
                     if (params != nullptr)
                     {
-                        params->try_emplace(TR_KEY_download_dir, optarg_sv);
+                        params->try_emplace(TR_KEY_download_dir, optarg);
                     }
                 }
                 else
                 {
                     auto params = tr_variant::Map{ 3U };
-                    params.try_emplace(TR_KEY_location, optarg_sv);
+                    params.try_emplace(TR_KEY_location, optarg);
                     params.try_emplace(TR_KEY_move, false);
                     add_id_arg(params, config);
 
@@ -3479,7 +3478,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 {
                     auto args = tr_variant::Map{ 3U };
                     args.try_emplace(TR_KEY_path, rename_from);
-                    args.try_emplace(TR_KEY_name, optarg_sv);
+                    args.try_emplace(TR_KEY_name, optarg);
                     add_id_arg(args, config);
 
                     auto map = tr_variant::Map{ 4U };
@@ -3495,7 +3494,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
                 break;
 
             case 965:
-                rename_from = optarg_sv;
+                rename_from = optarg;
                 break;
 
             case 732:

@@ -56,19 +56,18 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
-        auto const optarg_sv = std::string_view{ optarg };
         switch (c)
         {
         case 'a':
-            opts.add = optarg_sv;
+            opts.add = optarg;
             break;
 
         case 'd':
-            opts.deleteme = optarg_sv;
+            opts.deleteme = optarg;
             break;
 
         case 'r':
-            opts.replace[0] = optarg_sv;
+            opts.replace[0] = optarg;
             c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg);
 
             if (c != TR_OPT_UNK)
@@ -76,11 +75,11 @@ int parseCommandLine(app_options& opts, int argc, char const* const* argv)
                 return 1;
             }
 
-            opts.replace[1] = optarg_sv;
+            opts.replace[1] = optarg;
             break;
 
         case 's':
-            opts.source = optarg_sv;
+            opts.source = optarg;
             break;
 
         case 'V':
