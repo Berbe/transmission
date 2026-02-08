@@ -55,7 +55,7 @@ private:
     FILE* log_stream_ = nullptr;
 
     bool parse_args(int argc, char const* const* argv, bool* dump_settings, bool* foreground, int* exit_code);
-    bool reopen_log_file(std::string_view filename);
+    bool reopen_log_file(std::string& filename);
     bool setup_signals(struct event*& sig_ev);
     void cleanup_signals(struct event* sig_ev) const;
     void report_status();

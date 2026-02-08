@@ -163,7 +163,7 @@ namespace
 [[nodiscard]] std::string getConfigDir(int argc, char const* const* argv)
 {
     int c;
-    char const* optstr;
+    std::string optstr;
     int const ind = tr_optind;
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optstr)) != TR_OPT_DONE)
@@ -407,11 +407,11 @@ tr_variant load_settings(std::string_view const config_dir)
 
 } // namespace
 
-bool tr_daemon::reopen_log_file(std::string_view filename)
+bool tr_daemon::reopen_log_file(std::string& filename)
 {
     auto* const old_stream = log_stream_;
 
-    auto* new_stream = std::fopen(filename.data(), "a");
+    auto* new_stream = std::fopen(filename.c_str(), "a");
     if (new_stream == nullptr)
     {
         auto const err = errno;
@@ -525,7 +525,7 @@ void no_utp(tr_variant::Map& settings)
 bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_settings, bool* foreground, int* exit_code)
 {
     int c;
-    char const* optstr;
+    std::string optstr;
 
     *dump_settings = false;
     *foreground = false;
@@ -540,7 +540,6 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optstr)) != TR_OPT_DONE)
     {
-        auto const optstr_sv = std::string_view{ optstr != nullptr ? optstr : "" };
         switch (c)
         {
         case 'a':
@@ -591,9 +590,9 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
             break;
 
         case 'e':
-            if (reopen_log_file(optstr_sv))
+            if (reopen_log_file(optstr))
             {
-                log_file_name_ = optstr_sv;
+                log_file_name_ = optstr;
             }
 
             break;
@@ -766,7 +765,7 @@ bool tr_daemon::parse_args(int argc, char const* const* argv, bool* dump_setting
             break;
 
         case TR_OPT_UNK:
-            std::cerr << "Unexpected argument: " << optstr_sv << " " << std::endl;
+            std::cerr << "Unexpected argument: " << optstr << " " << std::endl;
             tr_getopt_usage(MyName, Usage, std::data(Options));
             *exit_code = 1;
             return false;

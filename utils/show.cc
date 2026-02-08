@@ -85,11 +85,11 @@ struct app_opts
 int parseCommandLine(app_opts& opts, int argc, char const* const* argv)
 {
     int c;
-    char const* optarg;
+    std::string optarg;
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
-        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
+        auto const optarg_sv = std::string_view{ optarg };
         switch (c)
         {
         case 'b':

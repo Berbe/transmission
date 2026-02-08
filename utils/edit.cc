@@ -52,11 +52,11 @@ namespace
 int parseCommandLine(app_options& opts, int argc, char const* const* argv)
 {
     int c;
-    char const* optarg;
+    std::string optarg;
 
     while ((c = tr_getopt(Usage, argc, argv, std::data(Options), &optarg)) != TR_OPT_DONE)
     {
-        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
+        auto const optarg_sv = std::string_view{ optarg };
         switch (c)
         {
         case 'a':
@@ -236,7 +236,7 @@ bool replaceURL(tr_variant* metainfo, std::string_view oldval, std::string_view 
     return changed;
 }
 
-[[nodiscard]] bool announce_list_has_url(tr_variant* announce_list, std::string_view url)
+[[nodiscard]] bool announce_list_has_url(tr_variant* announce_list, std::string& url)
 {
     int tierCount = 0;
     tr_variant* tier;
@@ -262,7 +262,7 @@ bool replaceURL(tr_variant* metainfo, std::string_view oldval, std::string_view 
     return false;
 }
 
-bool addURL(tr_variant* metainfo, std::string_view url)
+bool addURL(tr_variant* metainfo, std::string& url)
 {
     auto announce = std::string_view{};
     tr_variant* announce_list = nullptr;
@@ -306,7 +306,7 @@ bool addURL(tr_variant* metainfo, std::string_view url)
     return changed;
 }
 
-bool setSource(tr_variant* metainfo, std::string_view source_value)
+bool setSource(tr_variant* metainfo, std::string_view& source_value)
 {
     auto current_source = std::string_view{};
     bool const had_source = tr_variantDictFindStrView(metainfo, TR_KEY_source, &current_source);

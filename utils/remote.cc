@@ -2569,7 +2569,7 @@ tr_variant::Map& ensure_tadd(tr_variant& tadd)
 int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteConfig& config)
 {
     auto status = int{ EXIT_SUCCESS };
-    char const* optarg;
+    std::string optarg;
     auto sset = tr_variant{};
     auto tset = tr_variant{};
     auto tadd = tr_variant{};
@@ -2583,7 +2583,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             break;
         }
 
-        auto const optarg_sv = std::string_view{ optarg != nullptr ? optarg : "" };
+        auto const optarg_sv = std::string_view{ optarg };
         if (auto const step_mode = get_opt_mode(c); step_mode == MODE_META_COMMAND) /* meta commands */
         {
             switch (c)
@@ -3265,7 +3265,7 @@ int process_args(char const* rpcurl, int argc, char const* const* argv, RemoteCo
             {
             case 994:
                 args.insert_or_assign(TR_KEY_sequential_download, true);
-                if (!optarg_sv.empty())
+                if (!optarg.empty())
                 {
                     args.insert_or_assign(TR_KEY_sequential_download_from_piece, numarg(optarg_sv));
                 }
